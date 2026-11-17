@@ -1,0 +1,49 @@
+﻿@model IEnumerable<RaceDay.Web.Models.EventViewModel>
+@{
+    ViewData["Title"] = "Events";
+}
+
+<h2>Upcoming Events</h2>
+
+<div style="margin-bottom: 20px;">
+    <strong>Role: @Context.Session.GetString("UserRole")</strong> |
+    <a href="/Account/Logout">Logout</a>
+</div>
+
+@if (!Model.Any())
+{
+    <p>No events found.</p>
+}
+else
+{
+    <table border="1" style="width: 100%; text-align: left;">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Date</th>
+                <th>Location</th>
+                <th>Distance</th>
+                <th>Type</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var ev in Model)
+            {
+                <tr>
+                    <td>@ev.Name</td>
+                    <td>@ev.Date.ToShortDateString()</td>
+                    <td>@ev.Location</td>
+                    <td>@ev.Distance km</td>
+                    <td>@ev.EventType</td>
+                    <td>
+                        @if (Context.Session.GetString("UserRole") == "Participant")
+                        {
+                            <a href="/Enrolments/Create?eventId=@ev.Id">Enrol</a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
